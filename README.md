@@ -2,6 +2,8 @@
 
 **AfterMeet — An AI Agent that turns meetings into finished work**
 
+▶ 線上 demo：https://wind-apprentice.github.io/aftermeet-demo/
+
 這是「錄影用」的概念 demo：所有畫面、台詞和信件都寫死在腳本裡，搭配 AI 語音播放，模擬 AfterMeet Level 1（Gemini Enterprise Workflow Builder）的實際樣子：
 
 1. Teams 會議結束，逐字稿產生
