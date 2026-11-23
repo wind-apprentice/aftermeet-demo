@@ -22,6 +22,12 @@ var CONFIG = {
   useAudioFiles: true,
   audioDir: "audio",
 
+  // Narrator: short voiceover + subtitle bar for the key moments ({type:"narrate"} steps).
+  // Press N during playback to turn narration on/off.
+  narration: true,
+  narrator: { label: "AfterMeet", tts: { edge: "en-US-EmmaNeural", openai: "shimmer" },
+              browserVoiceNames: ["Karen", "Google UK English Female", "Emma", "Jenny", "Hazel"], browserVoice: 3, pitch: 1.0, rate: 0.98 },
+
   watermark: "Concept demo · simulated UI · fictional data",
   endCard: {
     title: "AfterMeet",

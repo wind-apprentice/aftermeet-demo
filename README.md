@@ -26,6 +26,7 @@
 | R | 重新開始 |
 | 1 / 2 / 3 | 左右並排／只看筆電／只看手機 |
 | H | 顯示目前步驟（HUD） |
+| N | 開／關旁白（字幕＋配音） |
 
 左上角的切換按鈕在滑鼠停止 2.5 秒後會自動隱藏，錄影時不會入鏡。
 網址後面加 `?step=40` 可以直接跳到第 40 步，方便截圖和檢查修改結果。
@@ -50,6 +51,7 @@ tools/generate_audio.py  依照 script.js 產生語音檔
 | 結尾畫面 | `config.js` | `endCard` |
 | 與會者、聲音 | `people.js` | 每人一行；`tts.edge` 是 edge-tts 的聲音名稱 |
 | 會議台詞 | `script.js` | `speak` 的 `text`，改完要重新產生語音 |
+| 旁白（重點解說） | `script.js` | `narrate` 的 `text`，改完要重新產生語音；聲音在 `config.js` 的 `narrator` |
 | Gemini Enterprise 抽出的項目 | `script.js` | `ge_items` 的 `items` |
 | SharePoint 清單和狀態變化 | `script.js` | `sp_row`、`sp_status`、`sp_log` |
 | Edward 收到的信和他的回覆 | `script.js` | `ph_mail`（`body` 可以寫 HTML）、`ph_reply` |
@@ -76,6 +78,7 @@ tools/generate_audio.py  依照 script.js 產生語音檔
 |---|---|---|
 | `join` / `leave` | `who` | 與會者加入／離開 |
 | `speak` | `id`, `who`, `text` | 說話（字幕加語音）。**整個步驟要寫在同一行**，語音工具才找得到 |
+| `narrate` | `id`, `text` | 旁白：畫面底部出現字幕條並播放 `audio/<id>.mp3`。**整個步驟寫在同一行** |
 | `chat_sys` | `text` | 會議聊天室的灰色系統訊息 |
 
 **Gemini Enterprise**
@@ -125,7 +128,7 @@ tools/generate_audio.py  依照 script.js 產生語音檔
 
 ## AI 語音
 
-每個 `speak` 步驟會播放 `audio/<id>.mp3`；找不到檔案時改用瀏覽器內建語音（只是暫代）。
+每個 `speak` 和 `narrate` 步驟會播放 `audio/<id>.mp3`（旁白 n01–n06 用 `config.js` 的 narrator 聲音）；找不到檔案時改用瀏覽器內建語音（只是暫代）。
 
 ```bash
 pip install edge-tts

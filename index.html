@@ -197,6 +197,9 @@
   .toast.show{opacity:1;transform:translate(-50%,0)}
   .skip{position:absolute;inset:0;background:rgba(10,20,20,.74);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;opacity:0;pointer-events:none;transition:opacity .4s;z-index:60}
   .skip.on{opacity:1}
+  .narr{position:absolute;left:50%;bottom:22px;width:max-content;transform:translate(-50%,12px);max-width:1500px;display:flex;align-items:center;gap:14px;background:rgba(10,20,20,.86);color:#fff;font-size:27px;line-height:1.35;padding:14px 26px;border-radius:12px;opacity:0;transition:all .3s;z-index:70;pointer-events:none}
+  .narr.on{opacity:1;transform:translate(-50%,0)}
+  .narr .tag{flex:none;font-size:14px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;background:#0A8276;padding:4px 10px;border-radius:6px}
   .skip .big{font-size:64px;font-weight:800}
   .skip .small{font-size:26px;opacity:.85;margin-top:12px}
   .endcard{position:absolute;inset:0;background:linear-gradient(140deg,#065E55,#0A8276);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .8s;z-index:70;text-align:center}
@@ -280,6 +283,7 @@
   <div class="skip" id="skip"><div class="big" id="skipBig"></div><div class="small" id="skipSmall"></div></div>
   <div class="endcard" id="endcard"><h1 id="endTitle"></h1><p id="endSub"></p><div class="fn" id="endMark"></div></div>
   <div class="toast" id="toast"></div>
+  <div class="narr" id="narr"><span class="tag" id="narrTag"></span><span id="narrText"></span></div>
   <svg id="cursor" viewBox="0 0 24 24"><path d="M4 2l15 9-7 1.5L9 20z" fill="#111" stroke="#fff" stroke-width="1.5"/></svg>
 </div></div>
 
@@ -368,6 +372,9 @@ async function exec(st, rid){
     case "join": $("tile-"+st.who).classList.add("in"); await wait(300); break;
     case "leave": $("tile-"+st.who).classList.remove("in"); await wait(300); break;
     case "chat_sys": $("chatList").insertAdjacentHTML("beforeend",`<div class="csys">${st.text}</div>`); await wait(600); break;
+    case "narrate": { if(fast||CONFIG.narration===false) break; const n=CONFIG.narrator||{}; $("narrTag").textContent=n.label||"Narrator"; $("narrText").innerHTML=st.text; $("narr").classList.add("on");
+      const src=st.audio||(CONFIG.useAudioFiles&&st.id?`${CONFIG.audioDir}/${st.id}.mp3`:null); const ok=src?await playAudio(src):false; if(!ok) await speakText(st.text.replace(/<[^>]+>/g,""),n);
+      await sleep(st.hold||500); $("narr").classList.remove("on"); await sleep(350); break; }
     case "speak": { if(fast) break; const p=PEOPLE[st.who], tile=$("tile-"+st.who); tile.classList.add("speaking"); $("cap").innerHTML=`<b>${st.who}</b>${st.text}`; $("cap").classList.add("on");
       const src=st.audio||(CONFIG.useAudioFiles&&st.id?`${CONFIG.audioDir}/${st.id}.mp3`:null); const ok=src?await playAudio(src):false; if(!ok) await speakText(st.text,p);
       tile.classList.remove("speaking"); $("cap").classList.remove("on"); await sleep(st.ms||350); break; }
@@ -427,6 +434,7 @@ addEventListener("keydown",e=>{
   if(e.code==="ArrowRight" && nextResolver) nextResolver();
   if(e.key==="r"||e.key==="R"){ reset(); $("start").style.display="flex"; }
   if(e.key==="h"||e.key==="H") $("hud").classList.toggle("on");
+  if(e.key==="n"||e.key==="N"){ CONFIG.narration=CONFIG.narration===false; $("hud").textContent="narration "+(CONFIG.narration?"on":"off"); }
   if(e.key==="1") setView(""); if(e.key==="2") setView("view-screen"); if(e.key==="3") setView("view-phone");
 });
 function setView(v){ stage.className=v; document.querySelectorAll("#views button").forEach(b=>b.classList.toggle("on",b.dataset.v===v)); fit(); }

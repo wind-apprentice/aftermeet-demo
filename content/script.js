@@ -24,6 +24,7 @@ var SCRIPT = [
   // ---------- 2. Gemini Enterprise: @AfterMeet ----------
   { type: "clock", t: "Mon 14:35" },
   { type: "left", to: "gemini" },
+  { type: "narrate", id: "n01", text: "When the meeting ends, the organizer runs AfterMeet in Gemini Enterprise on the Teams transcript." },
   { type: "ge_user", text: "@AfterMeet process today’s AI Agent Project Sync", file: "AI Agent Project Sync – Transcript.docx" },
   { type: "ge_typing", ms: 1600 },
   { type: "ge_items", intro: "I found <b>2 decisions</b> and <b>4 action items</b>. Each one quotes the transcript.",
@@ -36,8 +37,10 @@ var SCRIPT = [
   { type: "ge_ask", id: "owner", title: "Needs your input",
     question: "No owner was named for <b>“Check the data policy with IT”</b>. Who should own it?",
     options: ["Ian", "Edward", "Neo"] },
+  { type: "narrate", id: "n02", text: "One task has no owner, so AfterMeet asks instead of guessing." },
   { type: "ge_click", id: "owner", option: "Ian" },
   { type: "ge_approve", id: "go", lines: ["Add 4 items to the SharePoint list <i>AfterMeet Items</i>", "Email Edward and Neo to confirm their items"] },
+  { type: "narrate", id: "n03", text: "Nothing is written or sent until the organizer approves." },
   { type: "ge_click", id: "go", option: "Approve" },
   { type: "ge_agent", html: "✅ Done. 4 items added · 2 confirmation emails sent from your Outlook." },
   { type: "wait", ms: 1200 },
@@ -59,7 +62,7 @@ var SCRIPT = [
 <div class="it"><b>2. Update the cost table</b><br>Due Mon 30 Nov<br><q>Ian: “…and update the cost table by Monday?”</q></div>
 <p class="hint">Reply with <b>OK</b> · a change (e.g. “2 → Tue”) · “not mine”</p>` },
   { type: "ph_open", id: "m1" },
-  { type: "wait", ms: 1800 },
+  { type: "narrate", id: "n04", text: "Each owner gets one email with the exact quote, and confirms with a single reply." },
   { type: "clock", t: "Mon 14:40" },
   { type: "ph_reply", text: "1 OK, 2 OK" },
   { type: "sp_status", id: "a1", status: "Confirmed" },
@@ -91,7 +94,7 @@ var SCRIPT = [
   { type: "left", to: "outlook" },
   { type: "ol_mail", folder: "Inbox", from: "AfterMeet", subject: "[AfterMeet] 1 blocker in AI Agent Project Sync",
     body: `<p><b>Edward is blocked</b> on “Add the 4-hour estimate to slide 6”.</p><p>Reason: waiting for data from Finance.<br>Due Thu 26 Nov.</p><p class="hint">Open the list · Reply to Edward</p>` },
-  { type: "toast", text: "🔔 Ian knows on Wednesday, not at next Monday’s meeting", ms: 2600 },
+  { type: "narrate", id: "n05", text: "A blocker reaches the organizer on Wednesday, not at next week’s meeting." },
 
   // ---------- 6. Friday: done + agenda draft ----------
   { type: "skip", big: "⏩ Friday", small: "", clock: "Fri 16:40" },
@@ -113,7 +116,8 @@ var SCRIPT = [
 <div class="ag"><span class="pill st-Done">Done</span>Final demo video with AI voices · Neo</div>
 <div class="ag"><span class="pill st-Done">Done</span>Data policy checked with IT · Ian</div>
 <p class="hint">Saved to Drafts · Ian reviews and sends</p>` },
-  { type: "wait", ms: 3600 },
+  { type: "narrate", id: "n06", text: "Open items carry into the next agenda. The organizer just reviews and sends." },
+  { type: "wait", ms: 1200 },
   { type: "endcard" },
 ];
 if (typeof module !== "undefined") module.exports = { SCRIPT };
